@@ -4753,6 +4753,63 @@ window.COURSE.written = {
 })();
 
 </script>
+<script>/* js/core5.js */
+/* 零基础速成：最短路线、数学小补丁、方向毕业任务。 */
+(function () {
+const R = String.raw;
+const C = window.COURSE;
+const T = ['l1-1', 'l1-2', 'l2-1', 'l2-3', 'l2-2', 'c2-1', 'l3-3', 'l3-1', 'l2-4', 'l2-5'];
+C.fastPaths = [
+ { id: 'sat-f', cap: 'sat', name: '速成 · 卫星集群控制算法', desc: '最短路线：能写出编队模型，判断稳定性和一致性。', why: '只学建模和特征值需要的课。', lessons: T.concat(['l5-1', 'c5-2', 'l5-3', 'l2-6', 'l5-2', 'l5-5', 'l7-3', 'l7-4', 'l7-5']) },
+ { id: 'eng-f', cap: 'eng', name: '速成 · 火箭发动机数据计算', desc: '最短路线：能拟合试车数据、算性能、理解降噪。', why: '只学拟合、SVD 和牛顿法需要的课。', lessons: T.concat(['l2-6', 'l3-4', 'l4-1', 'l4-2', 'l4-3', 'l5-1', 'l6-1', 'l6-2', 'l3-5', 'l6-4', 'l7-8', 'l7-9']) },
+ { id: 'aero-f', cap: 'aero', name: '速成 · 总体气动设计', desc: '最短路线：能列影响系数方程，理解求解器和优化。', why: '只学方程组求解和优化需要的课。', lessons: T.concat(['l2-6', 'l3-4', 'l3-2', 'l3-5', 'l3-6', 'l6-4', 'l5-1', 'l5-3', 'l7-6', 'l7-7']) },
+ { id: 'nav-f', cap: 'nav', name: '速成 · 测控导航', desc: '最短路线：能换算坐标、估算定位精度、手算滤波。', why: '只学坐标、最小二乘和滤波需要的课。', lessons: T.concat(['l2-6', 'l3-4', 'l4-1', 'l4-2', 'l7-1', 'l7-2', 'l5-1', 'l5-2', 'l5-5', 'l5-3', 'l6-3']) }
+];
+
+C.basics = [
+ ['解二元一次方程', '解方程组的最小例子，全课都在用。', R`解 $x+y=5,\ x-y=1$：两式相加得 $2x=6$，所以 $x=3,\ y=2$。`, R`解 $x+y=7,\ x-y=3$，$x$ 是多少？`, R`$x=5$`, '1.3 课起'],
+ ['平方根和勾股定理', '向量长度就是勾股定理。', R`直角边 3 和 4，斜边 $\sqrt{3^2+4^2}=\sqrt{25}=5$。`, R`$\sqrt{6^2+8^2}$ 是多少？`, R`$10$`, '1.2 课'],
+ ['求和符号 ∑', R`$\sum$ 就是"全部加起来"，下面写从几开始，上面写到几。`, R`$\sum_{i=1}^{3}i=1+2+3=6$。`, R`$\sum_{i=1}^{3}i^2$ 是多少？`, R`$1+4+9=14$`, '1.2、5.1 课'],
+ ['sin 和 cos', '单位圆上转过角度 θ 的点，坐标是 (cos θ, sin θ)。旋转矩阵由它们组成。', R`$\cos0=1,\ \sin0=0$；$\cos90^\circ=0,\ \sin90^\circ=1$。$\pi$ 弧度就是 $180^\circ$。`, R`$\cos180^\circ$ 是多少？`, R`$-1$`, '1.5、8.1 课'],
+ ['指数 e 和对数 ln', R`$e\approx2.718$。$e^{at}$ 在 $a<0$ 时衰减，$a>0$ 时增长。$\ln$ 是它的反过程。`, R`$e^0=1$，$\ln1=0$，$\ln e=1$。`, R`$e^{-t}$ 在 $t$ 增大时变大还是变小？`, R`变小`, '7.11、8.9 课'],
+ ['导数：变化有多快', R`函数在某点的斜率。记住 $x^n$ 的导数是 $nx^{n-1}$ 就够用了。`, R`$x^2$ 的导数是 $2x$，在 $x=3$ 处等于 6。`, R`$x^3$ 在 $x=2$ 处的导数是多少？`, R`$3\times4=12$`, '7.14、8.7 课'],
+ ['偏导：只动一个变量', '有多个变量时，只看一个变，其他当常数。', R`$f=x^2+3y$：对 $x$ 的偏导是 $2x$，对 $y$ 的偏导是 $3$。`, R`$f=5x+y^2$ 对 $y$ 的偏导是？`, R`$2y$`, '7.14、8.7 课'],
+ ['积分：连续地累加', R`$\int$ 就是把很多小份加起来。课里只需要读懂它，不需要手算。`, R`$\int_0^T u^2\,dt$ 表示 0 到 $T$ 这段时间内 $u^2$ 的累计。`, R`$\int$ 对应前面哪个符号的连续版本？`, R`$\sum$`, '8.5 课'],
+ ['复数的模', R`$i^2=-1$。$a+bi$ 的模 $\sqrt{a^2+b^2}$ 就是它的"大小"。`, R`$3+4i$ 的模是 5。`, R`$6+8i$ 的模是多少？`, R`$10$`, '5.1、7.9 课'],
+ ['常见希腊字母', R`只是名字，不用怕：$\lambda$（兰姆达，特征值）、$\sigma$（西格玛，奇异值）、$\alpha$（阿尔法，攻角）、$\Delta$（德尔塔，变化量）、$\kappa$（卡帕，条件数）、$\Gamma$（伽马，环量）。`, R`$\Delta t$ 读作"德尔塔 t"，意思是一小段时间。`, R`$\lambda$ 在线代里通常表示什么？`, R`特征值`, '全课']
+];
+
+C.capstones = {
+ sat: { name: '卫星集群控制算法', story: '3 颗卫星组成编队，先连成一串 1–2–3，要让它们达成一致并保持队形。', steps: [
+  { q: R`写出拉普拉斯矩阵，特征值为 $0,1,3$。代数连通度 $\lambda_2$ 是多少？`, num: 1, tol: .001, e: R`第二小的特征值。`, l: 'l7-4' },
+  { q: R`初值 $(3,0,0)$，达成一致后每颗星的值是多少？`, num: 1, tol: .001, e: R`平均值。`, l: 'l7-4' },
+  { q: R`增加 1–3 的通信链路，三星全连通后 $\lambda_2$ 是多少？`, num: 3, tol: .001, e: R`全连通时 $\lambda_2=N$。`, l: 'l7-4' },
+  { q: R`一致收敛的速度变成原来的几倍？`, num: 3, tol: .001, e: R`速度由 $\lambda_2$ 决定，从 1 变成 3。`, l: 'l7-4' },
+  { q: R`轨道角速度 $n=0.001$ rad/s，径向偏移 $x_0=200$ m，无漂移需要的 $\dot{y}_0$ 是多少 m/s？`, num: -0.4, tol: .001, e: R`$-2nx_0$。`, l: 'l7-3' }] },
+ eng: { name: '火箭发动机数据计算', story: '一次试车测得 3 个推力点（时间 s，推力 kN）：(0, 98)、(1, 100)、(2, 104)。用直线 $F=c_0+c_1t$ 拟合。', steps: [
+  { q: R`正规方程为 $3c_0+3c_1=302,\ 3c_0+5c_1=308$。斜率 $c_1$ 是多少？`, num: 3, tol: .001, e: R`两式相减得 $2c_1=6$。`, l: 'l4-2' },
+  { q: R`截距 $c_0$ 是多少（保留两位小数）？`, num: 97.67, tol: .02, e: R`$(302-9)/3$。`, l: 'l4-2' },
+  { q: R`预测 $t=3$ 时的推力（kN，保留两位小数）。`, num: 106.67, tol: .05, e: R`$97.67+3\times3$。`, l: 'l4-2' },
+  { q: R`$F=100$ kN，$\dot{m}=34$ kg/s，$g_0=9.8$，比冲约多少秒？`, num: 300.1, tol: 1, e: R`$100000/(34\times9.8)$，单位要先换成 N。`, l: 'l7-8' },
+  { q: R`多通道数据的奇异值为 10 和 1，只留第一层，保留了百分之几的能量？`, num: 99, tol: .5, e: R`$100/101$，能量看平方。`, l: 'l6-2' }] },
+ aero: { name: '总体气动设计', story: '给一个机翼方案做快速估算，再优化一个简化的设计函数。', steps: [
+  { q: R`薄翼 $C_L=2\pi\alpha$，攻角 $\alpha=0.05$ rad，$C_L$ 约为多少？`, num: .314, tol: .003, e: R`$2\pi\times0.05$。`, l: 'l7-6' },
+  { q: R`影响系数矩阵 $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$。LU 分解后 $U$ 右下角元素是多少？`, num: 1.5, tol: .001, e: R`乘数 $0.5$，$2-0.5\times1$。`, l: 'l3-2' },
+  { q: R`解 $A\boldsymbol{\Gamma}=(1,1)^T$，$\Gamma_1$ 是多少（保留三位小数）？`, num: .333, tol: .005, e: R`对称，$\Gamma_1=\Gamma_2$，$3\Gamma_1=1$。`, l: 'l7-6' },
+  { q: R`同一几何算 20 个攻角，矩阵需要分解几次？`, num: 1, tol: .001, e: R`攻角只改变 $\mathbf{b}$。`, l: 'l7-6' },
+  { q: R`设计函数 $f=2x^2+y^2$，在 $(1,2)$ 处梯度的第一分量是多少？`, num: 4, tol: .001, e: R`$4x$。`, l: 'l7-7' },
+  { q: R`此处海森矩阵为 $\mathrm{diag}(4,2)$，梯度为 $(4,4)^T$。牛顿步 $\Delta y$ 是多少？`, num: -2, tol: .001, e: R`$2\Delta y=-4$，一步到达极小点 $(0,0)$。`, l: 'l7-7' }] },
+ nav: { name: '测控导航', story: '跟踪一个目标：换算坐标、估算精度，再用滤波融合测量。', steps: [
+  { q: R`换算矩阵 $\begin{pmatrix}0&1&0\\-1&0&0\\0&0&1\end{pmatrix}$，向量 $(2,3,0)^T$ 的新坐标第二分量是多少？`, num: -2, tol: .001, e: R`新坐标为 $(3,-2,0)^T$。`, l: 'l7-1' },
+  { q: R`PDOP = 2，伪距误差 4 m，位置误差约多少米？`, num: 8, tol: .001, e: R`$2\times4$。`, l: 'l7-2' },
+  { q: R`同一个量测了三次：10、12、14。最小二乘估计是多少？`, num: 12, tol: .001, e: R`$A=(1,1,1)^T$，结果就是平均值。`, l: 'l4-2' },
+  { q: R`匀速模型 $\Delta t=2$，$F=\begin{pmatrix}1&2\\0&1\end{pmatrix}$，状态（位置 100，速度 5），预测位置是多少？`, num: 110, tol: .001, e: R`$100+2\times5$。`, l: 'l5-5' },
+  { q: R`滤波：预测 12（方差 4），测量 14（方差 12）。估计值是多少？`, num: 12.5, tol: .001, e: R`$K=4/16=0.25$，$12+0.25\times2$。`, l: 'l6-3' },
+  { q: R`更新后的方差是多少？`, num: 3, tol: .001, e: R`$(1-0.25)\times4$，比预测和测量都小。`, l: 'l6-3' }] }
+};
+})();
+
+</script>
 <script>/* js/demos-1.js */
 /* 交互实验 · 公共工具 + 阶段 1–3 的实验 */
 (function () {
@@ -7065,6 +7122,7 @@ const PATHS = [
   { id: 'nav', name: '测控导航', desc: '坐标系与姿态、定位定轨、误差分析与滤波。', why: '坐标转换是基变换和正交矩阵；定位定轨是最小二乘，DOP 是条件数问题；卡尔曼滤波再用上矩阵指数和正定性。', lessons: ['c6-6', 'l2-6', 'l3-4', 'l7-1', 'l4-1', 'l4-2', 'l7-2', 'l5-5', 'l6-3'] }
 ];
 PATHS.forEach(p => { p.branch = p.lessons.length; p.lessons = CORE_IDS.concat(p.lessons).filter(id => byId[id]).sort((a, b) => byId[a].idx - byId[b].idx); });
+(C.fastPaths || []).slice().reverse().forEach(f => { const p = Object.assign({}, f, { fast: true, branch: f.lessons.length }); p.lessons = f.lessons.filter(id => byId[id]).sort((a, b) => byId[a].idx - byId[b].idx); PATHS.unshift(p); });
 const pathMins = p => p.lessons.reduce((s, id) => s + byId[id].mins, 0);
 const curPath = () => PATHS.find(p => p.id === S.path) || null;
 
@@ -7245,7 +7303,7 @@ function kindOf(id) {
   if (byId[id]) return 'lesson';
   if (/^check-\d+$/.test(id) && CHECKS[id.slice(6)]) return 'check';
   if (projById[id]) return 'project';
-  return ['home', 'review', 'lab', 'projects', 'glossary', 'about', 'tongji', 'library', 'patterns'].indexOf(id) >= 0 ? id : null;
+  return ['home', 'review', 'lab', 'projects', 'glossary', 'about', 'tongji', 'library', 'patterns', 'basics', 'capstone'].indexOf(id) >= 0 ? id : null;
 }
 function nextLessonId() {
   const p = curPath(), seq = p ? p.lessons : LESSONS.map(l => l.id);
@@ -7269,6 +7327,8 @@ function go(id, opts) {
   else if (kind === 'about') renderAbout();
   else if (kind === 'tongji') renderTongji();
   else if (kind === 'patterns') renderPatterns();
+  else if (kind === 'basics') renderBasics();
+  else if (kind === 'capstone') renderCapstone();
   else if (kind === 'library') renderLibrary();
   else renderHome();
   try { history.replaceState(null, '', '#' + id); } catch (_) {}
@@ -7324,6 +7384,8 @@ function renderSidebar() {
     '<li><a href="#projects" data-go="projects" class="toc-l toc-res' + (view === 'project' || view === 'projects' ? '" aria-current="page' : '') + '"><span></span><span class="toc-no">P</span><span class="toc-tt">实战项目</span><span class="toc-mm">' + pd + '/' + PROJECTS.length + '</span></a></li>' +
     '<li><a href="#glossary" data-go="glossary" class="toc-l toc-res"' + cur('glossary') + '><span></span><span class="toc-no">Aa</span><span class="toc-tt">术语表（中英）</span><span class="toc-mm">' + GLOSSARY.length + '</span></a></li>' +
     '<li><a href="#tongji" data-go="tongji" class="toc-res toc-l"' + cur('tongji') + '><span></span><span class="toc-no">目</span><span class="toc-tt">按同济目录查</span><span class="toc-mm"></span></a></li>' +
+    '<li><a href="#basics" data-go="basics" class="toc-res toc-l"' + cur('basics') + '><span></span><span class="toc-no">补</span><span class="toc-tt">数学小补丁</span><span class="toc-mm"></span></a></li>' +
+    '<li><a href="#capstone" data-go="capstone" class="toc-res toc-l"' + cur('capstone') + '><span></span><span class="toc-no">毕</span><span class="toc-tt">方向毕业任务</span><span class="toc-mm"></span></a></li>' +
     '<li><a href="#patterns" data-go="patterns" class="toc-res toc-l"' + cur('patterns') + '><span></span><span class="toc-no">题</span><span class="toc-tt">题型归纳</span><span class="toc-mm"></span></a></li>' +
     '<li><a href="#library" data-go="library" class="toc-res toc-l"' + cur('library') + '><span></span><span class="toc-no">+</span><span class="toc-tt">选修资料库</span><span class="toc-mm"></span></a></li>' +
     '<li><a href="#about" data-go="about" class="toc-l toc-res"' + cur('about') + '><span></span><span class="toc-no">i</span><span class="toc-tt">课程大纲与使用说明</span><span class="toc-mm"></span></a></li>';
@@ -7399,6 +7461,7 @@ function renderHome() {
       '<div class="stat"><b>' + due + '</b><span>今天待复习的卡片</span></div>' +
       '<div class="stat"><b>' + streak() + ' 天</b><span>连续学习 · 近 12 周</span><div class="heat-cal" aria-hidden="true">' + cal + '</div></div>' +
     '</div>' +
+    '<section class="home-sec"><h2>零基础最快上手</h2><ol><li><a href="#basics" data-go="basics">数学小补丁</a>：约 30 分钟，补齐后面会用到的中学和微积分符号。</li><li>在下面选一条“速成”路线：只学这个方向最少需要的课。</li><li><a href="#capstone" data-go="capstone">方向毕业任务</a>：独立做对就算过关，没做对就回到对应的课。</li></ol><p class="muted">要应付学校考试，再选完整路线或学阶段 1–6，并做模拟卷。</p></section>' +
     '<section class="home-sec"><h2>按目标算法学习</h2><p>选一个你要用的算法，只学它需要的课。侧栏会淡化不在路线上的课，"下一课"也会沿路线走。</p><div id="path-picker"></div></section>' +
     '<section class="home-sec"><h2>阶段测验</h2><p>学完一个阶段用它检验；已经有基础的阶段，也可以直接测验跳过。共 ' + nStages + ' 个阶段。</p><div class="cards3">' + Object.keys(CHECKS).map(n => checkCard(+n)).join('') + '</div></section>' +
     '<section class="home-sec"><h2>实战项目（选修）</h2><p>需要 Python 基础。每个项目 1–1.5 小时，按步骤动手写代码，并用给出的参考结果自检。以学知识为主时可以先跳过。</p><div class="cards3">' + PROJECTS.map(projCard).join('') + '</div></section>' +
@@ -7450,7 +7513,7 @@ function neighbors(l) {
 }
 function statusText(l) { return S.done[l.id] ? (S.viaTest[l.id] ? '测试通过' : '已完成') : S.quiz[l.id] && Object.keys(S.quiz[l.id]).length ? '学习中' : '未开始'; }
 function renderLesson(l) {
-  const st = STAGES[l.stage], uses = PATHS.filter(p => p.lessons.indexOf(l.id) >= 0).map(p => p.name), nb = neighbors(l);
+  const st = STAGES[l.stage], uses = PATHS.filter(p => !p.fast && p.lessons.indexOf(l.id) >= 0).map(p => p.name), nb = neighbors(l);
   const secs = [['sec-learn', '讲解'], l.demo ? ['sec-demo', '交互实验'] : null, ['sec-eng', '工程中的位置'], ['sec-quiz', '自测'], C.adv && C.adv[l.id] ? ['sec-adv', '进阶（选学）'] : null, ['sec-tutor', '问 AI 助教']].filter(Boolean);
   const num = id => String(secs.findIndex(s => s[0] === id) + 1).padStart(2, '0');
   const missing = l.pre.filter(id => byId[id] && !S.done[id]);
@@ -8004,6 +8067,30 @@ function renderPatterns() {
       '<details class="sol"><summary>看答案</summary><p>' + p[4] + '</p></details>' +
       '<p class="muted" style="font-size:13.5px">没想起来？回看 <a href="#' + p[5] + '" data-go="' + p[5] + '">' + byId[p[5]].no + ' ' + byId[p[5]].title + '</a></p>').join('') + '</div></section>').join('');
   typeset(main);
+}
+function renderBasics() {
+  main.innerHTML = '<p class="eyebrow">开课前 · 约 30 分钟</p><h1 class="page-h">数学小补丁</h1><p class="muted" style="margin:0 0 14px;max-width:62ch">后面的课会用到这些内容。只需要读懂、会算最简单的例子，已经会的可以跳过。</p>' +
+    C.basics.map((b, i) => '<div class="q"><div class="q-h"><span class="q-n">' + (i + 1) + '. ' + b[0] + '</span><span class="muted" style="font-size:13px">用在 ' + b[5] + '</span></div><div class="q-t"><p>' + b[1] + '</p><p>' + b[2] + '</p><p><b>试一试：</b>' + b[3] + '</p></div><details class="sol"><summary>看答案</summary><p>' + b[4] + '</p></details></div>').join('') +
+    '<div class="btns"><button type="button" class="btn primary" data-go="l1-1">开始第一课</button></div>';
+  typeset(main);
+}
+function renderCapstone() {
+  S.cap = S.cap || {};
+  const ids = Object.keys(C.capstones);
+  main.innerHTML = '<p class="eyebrow">学完速成路线后</p><h1 class="page-h">方向毕业任务</h1><p class="muted" style="margin:0 0 14px;max-width:62ch">每个方向一个小任务，把学过的工具串起来。不看讲解，全部做对才算过关；做错时可以直接回到对应的课。过关表示会用这些基础工具，不代表已经能独立做科研。</p>' +
+    ids.map(id => { const c = C.capstones[id];
+      return '<section class="sec" style="padding-top:18px" data-cap="' + id + '"><h2 class="sec-h">' + c.name + ' <span class="cap-st"></span></h2><p>' + prep(c.story) + '</p>' +
+        c.steps.map((q, i) => '<div class="q" data-i="' + i + '"><div class="q-h"><span class="q-n">第 ' + (i + 1) + ' 步</span><span class="q-state"></span></div><div class="q-t">' + prep(q.q) + '</div><div class="numq"><input type="text" inputmode="decimal" placeholder="输入数值" aria-label="第 ' + (i + 1) + ' 步答案"> <button type="button" class="btn cap-go">对答案</button></div><div class="q-exp" hidden></div></div>').join('') + '</section>'; }).join('');
+  typeset(main);
+  const mark = (sec, id) => { const c = C.capstones[id], r = S.cap[id] || {}, k = Object.keys(r).length; sec.querySelector('.cap-st').innerHTML = k === c.steps.length ? LA.chip('ok', '已过关') : k ? LA.chip('warn', k + '/' + c.steps.length) : ''; };
+  const show = (card, q, ok, v) => { card.classList.remove('res-ok', 'res-bad'); card.classList.add(ok ? 'res-ok' : 'res-bad'); card.querySelector('.q-state').innerHTML = LA.chip(ok ? 'ok' : 'bad', ok ? '正确' : '再想想'); const x = card.querySelector('.q-exp'); x.hidden = false;
+    x.innerHTML = ok ? prep(q.e) : '还不对。回看 <a href="#' + q.l + '" data-go="' + q.l + '">' + byId[q.l].no + ' ' + byId[q.l].title + '</a> 后再试。'; typeset(x); };
+  $$('[data-cap]', main).forEach(sec => { const id = sec.dataset.cap, c = C.capstones[id];
+    mark(sec, id);
+    $$('.q', sec).forEach(card => { const i = +card.dataset.i, q = c.steps[i], inp = card.querySelector('input');
+      if (S.cap[id] && S.cap[id][i]) { inp.value = q.num; show(card, q, true); }
+      card.querySelector('.cap-go').addEventListener('click', () => { const v = parseNum(inp.value || ''); if (!isFinite(v)) return; const ok = numOK(q, v); show(card, q, ok); if (ok) { (S.cap[id] = S.cap[id] || {})[i] = 1; touchDay(); save(); mark(sec, id); } });
+    }); });
 }
 function renderLibrary() {
   main.innerHTML = '<p class="eyebrow">选修 · 不学不影响主线</p><h1 class="page-h">选修资料库</h1><p class="muted" style="margin:0 0 14px;max-width:62ch">这里是更深入的讲解、证明和 Python 代码，留给学完主线后还想深入的同学。实战项目在侧栏另有入口。</p>' +
