@@ -4795,7 +4795,7 @@ C.capstones = {
  aero: { name: '总体气动设计', story: '给一个机翼方案做快速估算，再优化一个简化的设计函数。', steps: [
   { q: R`薄翼 $C_L=2\pi\alpha$，攻角 $\alpha=0.05$ rad，$C_L$ 约为多少？`, num: .314, tol: .003, e: R`$2\pi\times0.05$。`, l: 'l7-6' },
   { q: R`影响系数矩阵 $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$。LU 分解后 $U$ 右下角元素是多少？`, num: 1.5, tol: .001, e: R`乘数 $0.5$，$2-0.5\times1$。`, l: 'l3-2' },
-  { q: R`解 $A\boldsymbol{\Gamma}=(1,1)^T$，$\Gamma_1$ 是多少（保留三位小数）？`, num: .333, tol: .005, e: R`对称，$\Gamma_1=\Gamma_2$，$3\Gamma_1=1$。`, l: 'l7-6' },
+  { q: R`解 $A\Gamma=(1,1)^T$，$\Gamma_1$ 是多少（保留三位小数）？`, num: .333, tol: .005, e: R`对称，$\Gamma_1=\Gamma_2$，$3\Gamma_1=1$。`, l: 'l7-6' },
   { q: R`同一几何算 20 个攻角，矩阵需要分解几次？`, num: 1, tol: .001, e: R`攻角只改变 $\mathbf{b}$。`, l: 'l7-6' },
   { q: R`设计函数 $f=2x^2+y^2$，在 $(1,2)$ 处梯度的第一分量是多少？`, num: 4, tol: .001, e: R`$4x$。`, l: 'l7-7' },
   { q: R`此处海森矩阵为 $\mathrm{diag}(4,2)$，梯度为 $(4,4)^T$。牛顿步 $\Delta y$ 是多少？`, num: -2, tol: .001, e: R`$2\Delta y=-4$，一步到达极小点 $(0,0)$。`, l: 'l7-7' }] },
