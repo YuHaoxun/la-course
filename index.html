@@ -2728,8 +2728,8 @@ $$\rho_i=\|\mathbf{r}_i-\mathbf{r}\|+c\,\delta t+\varepsilon_i$$
 <p>$\mathbf{r}_i$ 是卫星位置（已知），未知数是接收机位置 $\mathbf{r}=(x,y,z)$ 和接收机钟差 $c\,\delta t$，共 4 个，所以至少需要 4 颗卫星。</p>
 <h3>线性化与最小二乘</h3>
 <p>在当前估计附近线性化（6.4 课），伪距残差与位置修正量之间是线性关系：</p>
-$$\Delta\boldsymbol{\rho}=G\,\Delta\mathbf{x},\qquad G\ \text{的第}\ i\ \text{行}=\big(-\mathbf{e}_i^T,\ 1\big)$$
-<p>$\mathbf{e}_i$ 是从接收机指向卫星 $i$ 的单位向量（视线方向）。可见卫星通常多于 4 颗，方程超定，用最小二乘（4.2 课）求修正量 $\Delta\mathbf{x}=(G^TG)^{-1}G^T\Delta\boldsymbol{\rho}$，再迭代几次（高斯-牛顿法）即收敛。</p>
+$$\Delta\rho=G\,\Delta\mathbf{x},\qquad G\ \text{的第}\ i\ \text{行}=\big(-\mathbf{e}_i^T,\ 1\big)$$
+<p>$\mathbf{e}_i$ 是从接收机指向卫星 $i$ 的单位向量（视线方向）。可见卫星通常多于 4 颗，方程超定，用最小二乘（4.2 课）求修正量 $\Delta\mathbf{x}=(G^TG)^{-1}G^T\Delta\rho$，再迭代几次（高斯-牛顿法）即收敛。</p>
 <h3>精度因子 DOP</h3>
 <p>若各伪距误差独立、标准差都是 $\sigma$，则定位误差的协方差为</p>
 $$\mathrm{Cov}(\Delta\mathbf{x})=\sigma^2\,(G^TG)^{-1}=\sigma^2H$$
@@ -2766,7 +2766,7 @@ print("集中:", dop([10, 30, 50, 70, 40], [40, 45, 50, 55, 60]))`,
       e: R`视线向量的垂直分量全是正的，与钟差这一列强相关，$(G^TG)^{-1}$ 中对应的元素因此偏大。` }
   ],
   cards: [
-    [R`GNSS 伪距定位怎样变成线性代数问题？`, R`线性化后 $\Delta\boldsymbol{\rho}=G\Delta\mathbf{x}$，$G$ 的行是 $(-\mathbf{e}_i^T,1)$；多颗卫星时用最小二乘并迭代。`],
+    [R`GNSS 伪距定位怎样变成线性代数问题？`, R`线性化后 $\Delta\rho=G\Delta\mathbf{x}$，$G$ 的行是 $(-\mathbf{e}_i^T,1)$；多颗卫星时用最小二乘并迭代。`],
     [R`DOP 的定义？`, R`$H=(G^TG)^{-1}$，$\mathrm{GDOP}=\sqrt{\mathrm{tr}H}$，$\mathrm{PDOP}=\sqrt{H_{11}+H_{22}+H_{33}}$；位置误差 $\approx\mathrm{PDOP}\times\sigma$。`]
   ]
 },
@@ -2961,7 +2961,7 @@ print("闭环特征值模:", np.abs(np.linalg.eigvals(A - B @ K)))   # 全部 < 
 <p>在位势流假设下，物面或升力面可以用一组分布在表面上的奇点（源、涡）来代替。每个奇点的强度 $\Gamma_j$ 是未知数。</p>
 <h3>边界条件给出方程</h3>
 <p>在每个控制点上，气流不能穿透表面：法向速度为零。控制点 $i$ 处的法向速度由来流和所有奇点共同产生：</p>
-$$\sum_{j=1}^NA_{ij}\Gamma_j=-\mathbf{V}_\infty\cdot\mathbf{n}_i\qquad\Longleftrightarrow\qquad A\boldsymbol{\Gamma}=\mathbf{b}$$
+$$\sum_{j=1}^NA_{ij}\Gamma_j=-\mathbf{V}_\infty\cdot\mathbf{n}_i\qquad\Longleftrightarrow\qquad A\Gamma=\mathbf{b}$$
 <p><b>影响系数</b> $A_{ij}$ 是第 $j$ 个奇点取单位强度时在第 $i$ 个控制点产生的法向速度，只与几何有关。</p>
 <h3>和 CFD 矩阵的区别</h3>
 <ul>
@@ -2972,7 +2972,7 @@ $$\sum_{j=1}^NA_{ij}\Gamma_j=-\mathbf{V}_\infty\cdot\mathbf{n}_i\qquad\Longleftr
 <h3>最简单的例子：二维平板</h3>
 <p>把弦长为 1 的平板分成 $N$ 段，每段的 1/4 处放一个点涡，3/4 处取控制点（经典的"1/4–3/4 规则"）。点涡 $j$ 在控制点 $i$ 产生的下洗速度给出</p>
 $$A_{ij}=\frac{1}{2\pi(x_i-\xi_j)},\qquad b_i=V_\infty\alpha$$
-<p>解出 $\boldsymbol{\Gamma}$，升力系数 $C_L=2\sum_j\Gamma_j/(V_\infty c)$，结果正好等于薄翼理论的 $2\pi\alpha$。控制点选得合适时 $A$ 是良态的；如果控制点和涡点重合，$A_{ij}$ 分母为零，矩阵就无法使用。</p>
+<p>解出 $\Gamma$，升力系数 $C_L=2\sum_j\Gamma_j/(V_\infty c)$，结果正好等于薄翼理论的 $2\pi\alpha$。控制点选得合适时 $A$ 是良态的；如果控制点和涡点重合，$A_{ij}$ 分母为零，矩阵就无法使用。</p>
 <h3>涡格法（VLM）</h3>
 <p>三维机翼用一组马蹄涡，按毕奥-萨伐尔定律计算影响系数，方程形式完全相同。结果给出展向升力分布、诱导阻力、升力线斜率、压心位置、操纵面效率等，是总体设计阶段的主力工具之一。</p>`,
   demo: { type: 'panel', note: '左边是影响系数矩阵 A 的热图（颜色越深，绝对值越大），它是稠密的。右边是解出的涡强分布与薄翼理论的对比。改变面元数 N 和攻角 α，看 C_L 与 2πα 的比较。' },
@@ -3006,7 +3006,7 @@ for N in [1, 5, 20, 80]:
       e: R`$2\pi\times0.1\approx0.628$。离散涡法采用 1/4–3/4 规则时，任意面元数都能精确得到这个总升力。` }
   ],
   cards: [
-    [R`面元法 / 涡格法的核心方程？`, R`控制点不穿透条件 $\sum_jA_{ij}\Gamma_j=-\mathbf{V}_\infty\cdot\mathbf{n}_i$，即 $A\boldsymbol{\Gamma}=\mathbf{b}$；$A_{ij}$ 只与几何有关。`],
+    [R`面元法 / 涡格法的核心方程？`, R`控制点不穿透条件 $\sum_jA_{ij}\Gamma_j=-\mathbf{V}_\infty\cdot\mathbf{n}_i$，即 $A\Gamma=\mathbf{b}$；$A_{ij}$ 只与几何有关。`],
     [R`面元法矩阵与 CFD 矩阵的区别？`, R`面元法：未知数少、矩阵稠密，用 LU 或快速多极；CFD：未知数多、矩阵稀疏，用稀疏直接法或迭代法。`]
   ]
 },
@@ -3018,19 +3018,19 @@ for N in [1, 5, 20, 80]:
 <p>设计变量排成向量 $\mathbf{p}$（翼型参数、展弦比、后掠角……），目标函数 $f(\mathbf{p})$（阻力、射程、质量……）。</p>
 <h3>梯度与海森矩阵</h3>
 <p><b>梯度</b> $\nabla f$ 是由各设计变量的敏感度组成的向量，$-\nabla f$ 是下降最快的方向。<b>海森矩阵</b> $H_{ij}=\partial^2f/\partial p_i\partial p_j$ 是对称矩阵。在当前点附近，函数近似为一个二次型（5.3 课）：</p>
-$$f(\mathbf{p}+\boldsymbol{\Delta})\approx f(\mathbf{p})+\nabla f^T\boldsymbol{\Delta}+\tfrac12\boldsymbol{\Delta}^TH\boldsymbol{\Delta}$$
+$$f(\mathbf{p}+\Delta)\approx f(\mathbf{p})+\nabla f^T\Delta+\tfrac12\Delta^TH\Delta$$
 <p>局部极小值的条件是 $\nabla f=\mathbf{0}$ 且 $H$ 正定。</p>
 <h3>优化算法里的线性代数</h3>
 <ul>
 <li><b>最速下降</b>：沿 $-\nabla f$ 走。$H$ 的条件数大时路径呈之字形，收敛极慢（与 3.6 课的迭代法是同一现象）。</li>
-<li><b>牛顿法</b>：解 $H\boldsymbol{\Delta}=-\nabla f$（又是 $A\mathbf{x}=\mathbf{b}$），二次函数一步到达极小点。</li>
+<li><b>牛顿法</b>：解 $H\Delta=-\nabla f$（又是 $A\mathbf{x}=\mathbf{b}$），二次函数一步到达极小点。</li>
 <li><b>准牛顿法</b>（BFGS）：用梯度的变化逐步构造 $H$ 的近似，并保持它对称正定，工程优化中最常用。</li>
 <li>设计变量量纲相差很大会让 $H$ 病态。先把变量归一化（缩放），是最简单有效的预处理。</li>
 </ul>
 <h3>伴随方法</h3>
 <p>气动目标 $J$ 依赖流场 $\mathbf{u}$，而流场必须满足离散的流动方程 $\mathbf{R}(\mathbf{u},\mathbf{p})=\mathbf{0}$。用有限差分求梯度，每个设计变量都要重新算一次 CFD。伴随方法先解一个<b>转置</b>的线性方程组</p>
-$$\Big(\frac{\partial\mathbf{R}}{\partial\mathbf{u}}\Big)^T\boldsymbol{\lambda}=\Big(\frac{\partial J}{\partial\mathbf{u}}\Big)^T$$
-<p>然后 $\dfrac{dJ}{d\mathbf{p}}=\dfrac{\partial J}{\partial\mathbf{p}}-\boldsymbol{\lambda}^T\dfrac{\partial\mathbf{R}}{\partial\mathbf{p}}$。无论有多少个设计变量，代价都只是一次额外的线性求解。这是转置（2.5 课）最有分量的工程应用之一。</p>`,
+$$\Big(\frac{\partial\mathbf{R}}{\partial\mathbf{u}}\Big)^T\lambda=\Big(\frac{\partial J}{\partial\mathbf{u}}\Big)^T$$
+<p>然后 $\dfrac{dJ}{d\mathbf{p}}=\dfrac{\partial J}{\partial\mathbf{p}}-\lambda^T\dfrac{\partial\mathbf{R}}{\partial\mathbf{p}}$。无论有多少个设计变量，代价都只是一次额外的线性求解。这是转置（2.5 课）最有分量的工程应用之一。</p>`,
   demo: { type: 'opt', note: '等高线是二次函数 f(p) = ½pᵀHp。拖动起点，比较最速下降（之字形）和牛顿法（一步到位）。增大条件数 κ，看最速下降的步数怎样增长。' },
   eng: R`<p>基于伴随 CFD 的翼型与机翼外形优化；飞行器多学科设计优化（MDO）；运载火箭总体参数与弹道优化；结构拓扑优化。商业与开源 CFD 软件普遍提供伴随求解器。</p>`,
   code: R`import numpy as np
@@ -3052,9 +3052,9 @@ print("牛顿法一步后:", p0 + step)`,
   quiz: [
     { q: R`光滑函数在某点取得局部极小值的条件是？`,
       o: [R`梯度为零且海森矩阵正定`, R`梯度为零即可`, R`海森矩阵为零`, R`函数值为零`], a: 0,
-      e: R`梯度为零只说明是驻点，可能是极大值或鞍点；还要二阶项 $\boldsymbol{\Delta}^TH\boldsymbol{\Delta}>0$。` },
+      e: R`梯度为零只说明是驻点，可能是极大值或鞍点；还要二阶项 $\Delta^TH\Delta>0$。` },
     { q: R`牛顿法每一步的核心计算是？`,
-      o: [R`求海森矩阵的特征值`, R`解线性方程组 $H\boldsymbol{\Delta}=-\nabla f$`, R`做 SVD`, R`求行列式`], a: 1,
+      o: [R`求海森矩阵的特征值`, R`解线性方程组 $H\Delta=-\nabla f$`, R`做 SVD`, R`求行列式`], a: 1,
       e: R`对局部二次近似求极小，令其梯度为零即得这个方程组。` },
     { q: R`伴随方法相对于有限差分的最大优点是？`,
       o: [R`不需要求解流动方程`, R`一次（转置）线性求解就得到所有设计变量的梯度，代价与变量个数无关`, R`结果是精确的二阶导数`, R`不需要网格`], a: 1,
@@ -3064,8 +3064,8 @@ print("牛顿法一步后:", p0 + step)`,
       e: R`等高线是狭长的椭圆，梯度方向几乎垂直于通向极小点的方向。` }
   ],
   cards: [
-    [R`极值条件与牛顿步？`, R`极小值：$\nabla f=\mathbf{0}$ 且 $H$ 正定；牛顿步解 $H\boldsymbol{\Delta}=-\nabla f$。`],
-    [R`伴随方法的核心？`, R`解转置方程 $(\partial\mathbf{R}/\partial\mathbf{u})^T\boldsymbol{\lambda}=(\partial J/\partial\mathbf{u})^T$，一次得到全部梯度，代价与设计变量数无关。`]
+    [R`极值条件与牛顿步？`, R`极小值：$\nabla f=\mathbf{0}$ 且 $H$ 正定；牛顿步解 $H\Delta=-\nabla f$。`],
+    [R`伴随方法的核心？`, R`解转置方程 $(\partial\mathbf{R}/\partial\mathbf{u})^T\lambda=(\partial J/\partial\mathbf{u})^T$，一次得到全部梯度，代价与设计变量数无关。`]
   ]
 },
 {
@@ -3623,7 +3623,7 @@ Object.assign(C.adv, {
 'l4-2': {
   body: R`
 <h3>Gauss–Markov 定理</h3>
-<p>设 $\mathbf{b}=A\mathbf{x}+\boldsymbol{\varepsilon}$，噪声零均值、协方差 $\sigma^2I$，$A$ 列满秩。则最小二乘估计 $\hat{\mathbf{x}}=(A^TA)^{-1}A^T\mathbf{b}$ 是所有<b>线性无偏</b>估计中方差最小的（BLUE）。它的协方差为</p>
+<p>设 $\mathbf{b}=A\mathbf{x}+\varepsilon$，噪声零均值、协方差 $\sigma^2I$，$A$ 列满秩。则最小二乘估计 $\hat{\mathbf{x}}=(A^TA)^{-1}A^T\mathbf{b}$ 是所有<b>线性无偏</b>估计中方差最小的（BLUE）。它的协方差为</p>
 $$\mathrm{Cov}(\hat{\mathbf{x}})=\sigma^2(A^TA)^{-1}$$
 <p>所以 $(A^TA)^{-1}$ 的对角元给出各参数的估计方差，这正是 7.2 课 DOP 的来源。$\sigma^2$ 的无偏估计是 $\hat\sigma^2=\mathbf{r}^T\mathbf{r}/(m-n)$，分母减去 $n$ 是因为拟合用掉了 $n$ 个自由度。</p>
 <h3>相关噪声与加权</h3>
@@ -3858,7 +3858,7 @@ $$B_{k+1}=B_k+\frac{(\mathbf{y}_k-B_k\mathbf{s}_k)\mathbf{s}_k^T}{\mathbf{s}_k^T
 $$R=I+\sin\theta\,[\mathbf{k}\times]+(1-\cos\theta)[\mathbf{k}\times]^2,\qquad[\mathbf{k}\times]=\begin{pmatrix}0&-k_3&k_2\\k_3&0&-k_1\\-k_2&k_1&0\end{pmatrix}$$
 <p>它正是 $R=e^{\theta[\mathbf{k}\times]}$（反对称矩阵的指数是旋转矩阵，5.5 课）。叉乘就是乘一个反对称矩阵：$\mathbf{a}\times\mathbf{b}=[\mathbf{a}\times]\mathbf{b}$。</p>
 <h3>姿态运动学</h3>
-<p>本体角速度为 $\boldsymbol{\omega}$ 时，方向余弦矩阵满足 $\dot{C}_b^i=C_b^i[\boldsymbol{\omega}\times]$。数值积分会让 $C$ 逐渐偏离正交（只需多几步截断误差），需要定期用极分解（6.1 课进阶）或近似 $C\leftarrow C(3I-C^TC)/2$ 重新正交化。四元数运动学 $\dot{\mathbf{q}}=\tfrac12\Omega(\boldsymbol{\omega})\mathbf{q}$ 是线性的，只需要重新归一化。</p>
+<p>本体角速度为 $\omega$ 时，方向余弦矩阵满足 $\dot{C}_b^i=C_b^i[\omega\times]$。数值积分会让 $C$ 逐渐偏离正交（只需多几步截断误差），需要定期用极分解（6.1 课进阶）或近似 $C\leftarrow C(3I-C^TC)/2$ 重新正交化。四元数运动学 $\dot{\mathbf{q}}=\tfrac12\Omega(\omega)\mathbf{q}$ 是线性的，只需要重新归一化。</p>
 <h3>参数化的拓扑限制</h3>
 <p>任何三参数表示（欧拉角、罗德里格斯参数、MRP）都必然在某处奇异，这是拓扑事实：$SO(3)$ 不能被一张三维坐标图整体覆盖。四元数用 4 个参数避免奇异，代价是双重覆盖：$\mathbf{q}$ 与 $-\mathbf{q}$ 表示同一姿态，控制律中要注意"走远路"（unwinding）问题。</p>`,
   quiz: [
@@ -3872,9 +3872,9 @@ $$R=I+\sin\theta\,[\mathbf{k}\times]+(1-\cos\theta)[\mathbf{k}\times]^2,\qquad[\
 'l7-2': {
   body: R`
 <h3>加权定位</h3>
-<p>低仰角卫星的伪距受电离层、对流层和多径影响更大。按仰角给权（如 $w_i=\sin^2E_i$），解 $\Delta\mathbf{x}=(G^TWG)^{-1}G^TW\Delta\boldsymbol{\rho}$，协方差为 $(G^TWG)^{-1}$（4.2 课进阶的 Gauss–Markov 定理，$W=\Sigma^{-1}$）。</p>
+<p>低仰角卫星的伪距受电离层、对流层和多径影响更大。按仰角给权（如 $w_i=\sin^2E_i$），解 $\Delta\mathbf{x}=(G^TWG)^{-1}G^TW\Delta\rho$，协方差为 $(G^TWG)^{-1}$（4.2 课进阶的 Gauss–Markov 定理，$W=\Sigma^{-1}$）。</p>
 <h3>RAIM：用残差检测故障卫星</h3>
-<p>最小二乘残差 $\mathbf{r}=(I-P)\Delta\boldsymbol{\rho}$，$P=G(G^TG)^{-1}G^T$ 是投影矩阵，$I-P$ 投影到左零空间（2.1 课进阶）。无故障时 $\mathbf{r}^T\mathbf{r}/\sigma^2$ 服从自由度为 $m-4$ 的 $\chi^2$ 分布；超过阈值即判定有故障。逐颗剔除卫星重算，或看各分量的标准化残差，可以识别是哪一颗。至少需要 5 颗卫星才能检测、6 颗才能识别，这正是左零空间维数 $m-4$ 的含义。</p>
+<p>最小二乘残差 $\mathbf{r}=(I-P)\Delta\rho$，$P=G(G^TG)^{-1}G^T$ 是投影矩阵，$I-P$ 投影到左零空间（2.1 课进阶）。无故障时 $\mathbf{r}^T\mathbf{r}/\sigma^2$ 服从自由度为 $m-4$ 的 $\chi^2$ 分布；超过阈值即判定有故障。逐颗剔除卫星重算，或看各分量的标准化残差，可以识别是哪一颗。至少需要 5 颗卫星才能检测、6 颗才能识别，这正是左零空间维数 $m-4$ 的含义。</p>
 <h3>载波相位与整周模糊度</h3>
 <p>厘米级定位用载波相位，但每颗卫星多一个未知的整数周数 $N_i$。浮点解给出 $\hat{\mathbf{N}}$ 与协方差 $Q_N$，要找使 $(\mathbf{N}-\hat{\mathbf{N}})^TQ_N^{-1}(\mathbf{N}-\hat{\mathbf{N}})$ 最小的<b>整数</b>向量。$Q_N$ 通常极度病态（误差椭球细长），直接搜索代价巨大。LAMBDA 方法用整数幺模矩阵 $Z$（$\det Z=\pm1$、元素为整数）做"去相关"变换，使 $Z^TQ_NZ$ 接近对角，再高效搜索。这是格基约化（LLL）思想在导航中的应用。</p>
 <h3>最优几何</h3>
@@ -3977,13 +3977,13 @@ $$\mathcal{H}=\begin{pmatrix}A&-BR^{-1}B^T\\-Q&-A^T\end{pmatrix}$$
 'l7-7': {
   body: R`
 <h3>约束优化与 KKT 条件</h3>
-<p>$\min f(\mathbf{p})$ s.t. $\mathbf{c}(\mathbf{p})=\mathbf{0}$（例如升力系数、体积、配平约束）。引入 Lagrange 函数 $\mathcal{L}=f+\boldsymbol{\mu}^T\mathbf{c}$，一阶必要条件是 $\nabla_p\mathcal{L}=\mathbf{0}$、$\mathbf{c}=\mathbf{0}$。牛顿法求解这组方程，每步解 KKT 系统：</p>
-$$\begin{pmatrix}\nabla^2\mathcal{L}&C^T\\C&0\end{pmatrix}\begin{pmatrix}\Delta\mathbf{p}\\\Delta\boldsymbol{\mu}\end{pmatrix}=-\begin{pmatrix}\nabla\mathcal{L}\\\mathbf{c}\end{pmatrix}$$
+<p>$\min f(\mathbf{p})$ s.t. $\mathbf{c}(\mathbf{p})=\mathbf{0}$（例如升力系数、体积、配平约束）。引入 Lagrange 函数 $\mathcal{L}=f+\mu^T\mathbf{c}$，一阶必要条件是 $\nabla_p\mathcal{L}=\mathbf{0}$、$\mathbf{c}=\mathbf{0}$。牛顿法求解这组方程，每步解 KKT 系统：</p>
+$$\begin{pmatrix}\nabla^2\mathcal{L}&C^T\\C&0\end{pmatrix}\begin{pmatrix}\Delta\mathbf{p}\\\Delta\mu\end{pmatrix}=-\begin{pmatrix}\nabla\mathcal{L}\\\mathbf{c}\end{pmatrix}$$
 <p>这个矩阵对称但<b>不定</b>（鞍点矩阵），不能用 Cholesky 或 CG，要用对称不定分解（Bunch–Kaufman $LDL^T$）或 MINRES。二阶充分条件只要求 $\nabla^2\mathcal{L}$ 在约束的<b>零空间</b>上正定（零空间方法，3.3 课）。</p>
 <h3>BFGS 的线性代数</h3>
 <p>$B_{k+1}=B_k-\dfrac{B_k\mathbf{s}\mathbf{s}^TB_k}{\mathbf{s}^TB_k\mathbf{s}}+\dfrac{\mathbf{y}\mathbf{y}^T}{\mathbf{y}^T\mathbf{s}}$ 是秩 2 修正，只要曲率条件 $\mathbf{y}^T\mathbf{s}>0$ 成立（Wolfe 线搜索保证），就保持对称正定。L-BFGS 只存最近 $m$ 对 $(\mathbf{s},\mathbf{y})$，以 $O(mn)$ 的存储处理上万个设计变量。</p>
 <h3>伴随方程的推导</h3>
-<p>对 $J(\mathbf{u},\mathbf{p})$ 加上约束 $\mathbf{R}(\mathbf{u},\mathbf{p})=\mathbf{0}$ 构成 Lagrange 函数 $\mathcal{L}=J-\boldsymbol{\lambda}^T\mathbf{R}$。要求 $\partial\mathcal{L}/\partial\mathbf{u}=\mathbf{0}$，正好得到伴随方程 $(\partial\mathbf{R}/\partial\mathbf{u})^T\boldsymbol{\lambda}=(\partial J/\partial\mathbf{u})^T$，此时 $dJ/d\mathbf{p}=\partial\mathcal{L}/\partial\mathbf{p}$。离散伴随直接对离散方程求转置，与求解器完全一致；连续伴随先推导伴随 PDE 再离散，二者在网格加密时一致。转置的雅可比条件数与原雅可比相同，所以伴随求解的难度与原流场求解相当。</p>`,
+<p>对 $J(\mathbf{u},\mathbf{p})$ 加上约束 $\mathbf{R}(\mathbf{u},\mathbf{p})=\mathbf{0}$ 构成 Lagrange 函数 $\mathcal{L}=J-\lambda^T\mathbf{R}$。要求 $\partial\mathcal{L}/\partial\mathbf{u}=\mathbf{0}$，正好得到伴随方程 $(\partial\mathbf{R}/\partial\mathbf{u})^T\lambda=(\partial J/\partial\mathbf{u})^T$，此时 $dJ/d\mathbf{p}=\partial\mathcal{L}/\partial\mathbf{p}$。离散伴随直接对离散方程求转置，与求解器完全一致；连续伴随先推导伴随 PDE 再离散，二者在网格加密时一致。转置的雅可比条件数与原雅可比相同，所以伴随求解的难度与原流场求解相当。</p>`,
   quiz: [
     { q: R`BFGS 每步对海森近似做的修正是几秩的？`, num: 2,
       e: R`减去一个秩 1 项、加上一个秩 1 项，共秩 2；在曲率条件下保持正定。` },
@@ -4281,13 +4281,13 @@ def('c4-2', '4.2', '极大无关组与向量组的秩', 18, '从一堆向量里�
 
 def('c4-3', '4.3', '向量空间与解的结构', 20, '方程组的全部解可以写成简洁公式；无穷多解的题这样答。',
  page(R`<p>对加法和数乘封闭的向量集合叫<b>向量空间</b>。它的一个极大无关组叫<b>基</b>，个数叫<b>维数</b>。</p>
-<p>$A\mathbf{x}=\mathbf{0}$ 的解构成向量空间，基叫<b>基础解系</b>，含 $n-R(A)$ 个向量。$A\mathbf{x}=\mathbf{b}$ 的通解：</p>$$\mathbf{x}=\mathbf{x}_p+k_1\boldsymbol{\xi}_1+\cdots+k_{n-r}\boldsymbol{\xi}_{n-r}$$<p>即一个特解加上齐次方程的通解。</p>`,
+<p>$A\mathbf{x}=\mathbf{0}$ 的解构成向量空间，基叫<b>基础解系</b>，含 $n-R(A)$ 个向量。$A\mathbf{x}=\mathbf{b}$ 的通解：</p>$$\mathbf{x}=\mathbf{x}_p+k_1\xi_1+\cdots+k_{n-r}\xi_{n-r}$$<p>即一个特解加上齐次方程的通解。</p>`,
  R`<p>$x_1+x_2+x_3=1$：$R(A)=1$，$n=3$，基础解系有 2 个向量。自由未知数取 $x_2,x_3$：</p><ol><li>特解（令 $x_2=x_3=0$）：$(1,0,0)^T$；</li><li>齐次解（令 $(x_2,x_3)=(1,0),(0,1)$）：$(-1,1,0)^T,\ (-1,0,1)^T$。</li></ol><p>通解 $\mathbf{x}=(1,0,0)^T+k_1(-1,1,0)^T+k_2(-1,0,1)^T$。</p>`,
  R`基础解系来自<b>齐次</b>方程，求它时右端取 0。非齐次方程的解不构成向量空间（不含零向量）。`,
  R`通解 = 特解 + 基础解系的任意组合；基础解系有 $n-r$ 个向量。`),
  R`<p>无约束结构的刚体位移、化学反应的独立计量关系，都是基础解系（8.9 课）。</p>`,
  [{ q: R`跟着做：$n=5,\ R(A)=3$，基础解系含几个向量？`, num: 2, e: R`$5-3=2$。` },
-  { q: R`自己做：$\mathbf{x}_p$ 是 $A\mathbf{x}=\mathbf{b}$ 的解，$A\boldsymbol{\xi}=\mathbf{0}$，则 $\mathbf{x}_p+3\boldsymbol{\xi}$？`, o: [R`也是 $A\mathbf{x}=\mathbf{b}$ 的解`, R`是齐次方程的解`, R`不是解`, R`是 $A\mathbf{x}=3\mathbf{b}$ 的解`], a: 0, e: R`$A\mathbf{x}_p+3A\boldsymbol{\xi}=\mathbf{b}$。` },
+  { q: R`自己做：$\mathbf{x}_p$ 是 $A\mathbf{x}=\mathbf{b}$ 的解，$A\xi=\mathbf{0}$，则 $\mathbf{x}_p+3\xi$？`, o: [R`也是 $A\mathbf{x}=\mathbf{b}$ 的解`, R`是齐次方程的解`, R`不是解`, R`是 $A\mathbf{x}=3\mathbf{b}$ 的解`], a: 0, e: R`$A\mathbf{x}_p+3A\xi=\mathbf{b}$。` },
   { q: R`考试题：$\mathbb{R}^3$ 中过原点的平面是几维向量空间？`, num: 2, e: R`一组基含两个不共线向量。` }],
  [[R`非齐次方程组的通解结构？`, R`特解 + 基础解系的线性组合；基础解系含 $n-R(A)$ 个向量。`]], ['l3-1', 'c4-2'], ['求基础解系', '写出方程组的通解', '理解基和维数'], { type: 'lines', preset: 2, note: '"重合"情形：全部解 = 特解（紫点）+ 零空间方向（绿箭头）的倍数。' }, '');
 
